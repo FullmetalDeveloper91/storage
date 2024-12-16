@@ -19,7 +19,7 @@ import ru.fmd.storage.repository.EquipmentRepository;
 
 
 @RestController
-@RequestMapping("/equipments")
+@RequestMapping("api/v1/equipments")
 public class EquipmentController {
 
     private final EquipmentRepository repo;
@@ -30,14 +30,16 @@ public class EquipmentController {
 
     @GetMapping
     public List<EquipmentDTO> getAllEquipments(
-            @RequestParam Optional<UUID> storage, 
-            @RequestParam(required = false) Optional<UUID> category
-        ) {           
+            @RequestParam Optional<UUID> storage,
+            @RequestParam Optional<UUID> category
+        ) {
         List<EquipmentDTO> result = new ArrayList<EquipmentDTO>();
         List<Equipment> dbResult;
 
         //dbResult = repo.findByCategory_categoryID(category.orElse(null));
-        dbResult=repo.findByStorageID(storage.orElse(null));
+        //dbResult=repo.findByStorageID(storage.orElse(null));
+
+        dbResult = repo.findByEquipmentsOnStorage_Storage_StorageID(storage.orElse(null));
 
         dbResult.forEach(equip -> 
             result.add(EquipmentMapper.MapToDTO(equip))
